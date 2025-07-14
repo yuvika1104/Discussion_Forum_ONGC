@@ -1,0 +1,61 @@
+CREATE TABLE IF NOT EXISTS user (
+    cpf_no CHAR(5) PRIMARY KEY,                         -- CPF NO. (5-digit string)
+    email VARCHAR(255) NOT NULL UNIQUE,                 -- Email address
+    phone_number VARCHAR(15),                           -- Phone number (adjust length as needed)
+    name VARCHAR(100) NOT NULL,                         -- Full name
+    designation VARCHAR(100),                           -- Job title
+    department VARCHAR(100),                            -- Department
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- Time of account creation
+    bio TEXT,                                           -- Description or bio
+    profile_photo_path VARCHAR(255),                    -- Path to profile image
+    hashed_password VARCHAR(255) NOT NULL,              -- Hashed password
+    role TINYINT NOT NULL DEFAULT 0                     -- User role (0=regular, 1=admin, etc.)
+);
+
+
+CREATE TABLE  IF NOT EXISTS threads (
+    thread_id INT PRIMARY KEY AUTO_INCREMENT,           -- Unique thread ID
+    question TEXT NOT NULL,                             -- Thread question text
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- Timestamp of thread creation
+    cpf_no CHAR(5),                                     -- Foreign key referencing user
+
+    FOREIGN KEY (cpf_no) REFERENCES user(cpf_no)
+        ON DELETE SET NULL                              -- Set cpf_no to NULL if user is deleted
+);
+
+
+CREATE TABLE  IF NOT EXISTS replies (
+    reply_id INT PRIMARY KEY AUTO_INCREMENT,            -- Unique ID for each reply
+    thread_id INT,                                      -- Foreign key referencing threads
+    cpf_no CHAR(5),                                     -- Foreign key referencing user
+    content TEXT NOT NULL,                              -- Reply text content
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- Timestamp of reply creation
+
+    FOREIGN KEY (thread_id) REFERENCES threads(thread_id)
+        ON DELETE CASCADE,                              -- Delete replies if thread is deleted
+
+    FOREIGN KEY (cpf_no) REFERENCES user(cpf_no)
+        ON DELETE SET NULL                              -- Set cpf_no to NULL if user is deleted
+);
+
+
+CREATE TABLE  IF NOT EXISTS thread_images (
+    thread_id INT,                                      -- Foreign key referencing threads
+    image_path VARCHAR(255) NOT NULL,                   -- Unique path for each image in a thread
+
+    PRIMARY KEY (thread_id, image_path),                -- Composite primary key
+
+    FOREIGN KEY (thread_id) REFERENCES threads(thread_id)
+        ON DELETE CASCADE
+);
+
+
+CREATE TABLE  IF NOT EXISTS reply_images (
+    reply_id INT,                                       -- Foreign key referencing replies
+    image_path VARCHAR(255) NOT NULL,                   -- Unique path for each image in a reply
+
+    PRIMARY KEY (reply_id, image_path),                 -- Composite primary key
+
+    FOREIGN KEY (reply_id) REFERENCES replies(reply_id)
+        ON DELETE CASCADE
+);
