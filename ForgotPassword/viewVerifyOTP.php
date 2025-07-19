@@ -5,42 +5,61 @@ if (!isset($_SESSION['reset_cpf']) || !isset($_SESSION['reset_otp'])) {
     header('Location: viewForgotPassword.php');
     exit;
 }
-echo $_SESSION['reset_otp'];
+// Note: echo $_SESSION['reset_otp']; should probably be removed in a production environment
+// as it displays the OTP directly on the page, which is a security risk.
+// I'm leaving it as per your original code, but strongly recommend removing it.
+echo $_SESSION['reset_otp']; 
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../includes/styles.css">
+
+
+</head>
+<body>
+
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="form-container">
-                <h2><i class="fas fa-shield-alt"></i> Verify OTP</h2>
+        <div class="col-md-7 col-lg-5"> <div class="form-container">
+                <h2 class="text-maroon mb-4">
+                    <i class="fas fa-shield-alt me-2"></i> Verify OTP
+                </h2>
                 
                 <?php if (isset($_SESSION['otp_message'])): ?>
-                    <!-- <div class="alert alert-<?= $_SESSION['otp_message_type'] ?? 'info' ?>">
-                        <?= htmlspecialchars($_SESSION['otp_message']) ?> -->
-                        <?php 
-                        unset($_SESSION['otp_message']);
-                        unset($_SESSION['otp_message_type']); 
-                        ?>
+                    <div class="alert <?php echo isset($_SESSION['otp_message_type']) && $_SESSION['otp_message_type'] == 'error' ? 'alert-danger' : 'alert-success'; ?> alert-maroon fade show" role="alert">
+                        <?php echo htmlspecialchars($_SESSION['otp_message']); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
+                    <?php 
+                    // Unset messages after displaying
+                    unset($_SESSION['otp_message']);
+                    unset($_SESSION['otp_message_type']); 
+                    ?>
                 <?php endif; ?>
                 
-                <p class="text-muted mb-3">
-                    We sent a 6-digit code to <?= isset($_SESSION['reset_email']) ? htmlspecialchars($_SESSION['reset_email']) : 'your email' ?>
+                <p class="text-muted mb-4 text-center"> We sent a 6-digit code to <strong><?= isset($_SESSION['reset_email']) ? htmlspecialchars($_SESSION['reset_email']) : 'your email' ?></strong>
                 </p>
                 
                 <form method="POST" action="executeVerifyOTP.php">
-                    <div class="mb-3">
-                        <label for="otp" class="form-label">Enter 6-digit OTP</label>
-                        <input type="text" class="form-control" id="otp" name="otp" 
+                    <div class="mb-4"> <label for="otp" class="form-label">Enter 6-digit OTP</label>
+                        <input type="text" class="form-control text-center" id="otp" name="otp" 
                                maxlength="6" pattern="\d{6}" required
-                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                    </div>
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                               placeholder="e.g., 123456"> </div>
                     
-                    <button type="submit" class="btn btn-primary w-100 mb-3">
-                        <i class="fas fa-check"></i> Verify OTP
-                    </button>
-                    <div class="text-center">
-                        <a href="executeResendOTP.php" class="text-decoration-none">
-                            <i class="fas fa-sync-alt"></i> Resend OTP
+                    <div class="d-grid gap-2 mb-4"> <button type="submit" class="btn btn-maroon btn-lg">
+                            <i class="fas fa-check me-2"></i> Verify OTP
+                        </button>
+                    </div>
+
+                    <hr class="my-4 border-maroon"> <div class="text-center">
+                        <a href="executeResendOTP.php" class="text-maroon text-decoration-none fw-bold"> <i class="fas fa-sync-alt me-2"></i> Resend OTP
                         </a>
                     </div>
                 </form>
@@ -48,3 +67,7 @@ echo $_SESSION['reset_otp'];
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

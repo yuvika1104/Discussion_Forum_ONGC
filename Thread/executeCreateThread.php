@@ -9,10 +9,9 @@ if (!isset($_SESSION['user_cpf'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // $title = trim($_POST['title']);
+    $title = trim($_POST['title']);
     $content = trim($_POST['content']);
     $user_cpf = $_SESSION['user_cpf'];
-
     $errors = [];
     $uploaded_images = [];
 
@@ -21,9 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors[] = 'Please fill in all required fields.';
     }
 
-    // if (strlen($title) < 5) {
-    //     $errors[] = 'Thread title must be at least 5 characters long.';
-    // }
+    if (strlen($title) < 5) {
+        $errors[] = 'Thread title must be at least 5 characters long.';
+    }
 
     if (strlen($content) < 10) {
         $errors[] = 'Thread content must be at least 10 characters long.';
@@ -32,11 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($errors)) {
         try {
             $pdo->beginTransaction();
-
+            
             // Insert thread first
-            $sql = "INSERT INTO threads (cpf_no, question) VALUES (?, ?)";
+            $sql = "INSERT INTO threads (cpf_no, title, content) VALUES (?, ?,?)";
             $stmt = $pdo->prepare($sql);
-            $stmt->execute([$user_cpf, $content]);
+            $stmt->execute([$user_cpf,$title, $content]);
             $thread_id = $pdo->lastInsertId();
 
             

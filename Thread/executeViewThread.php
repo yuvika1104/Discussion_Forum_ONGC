@@ -18,7 +18,7 @@ else {
 }
 
 // Get thread details with user info
-$sql = "SELECT t.*, u.name as user_name, u.department, u.profile_photo_path, u.role, u.designation
+$sql = "SELECT t.*, u.name as user_name, u.department,u.bio, u.profile_photo_path, u.role, u.designation
         FROM threads t 
         LEFT JOIN user u ON t.cpf_no = u.cpf_no
         WHERE t.thread_id = ?";
@@ -40,7 +40,7 @@ $img_stmt->execute([$thread_id]);
 $thread_images = $img_stmt->fetchAll();
 
 // Get replies with user info
-$reply_sql = "SELECT r.*, u.name as user_name, u.department, u.profile_photo_path, u.role, u.designation
+$reply_sql = "SELECT r.*, u.name as user_name, u.bio,u.department, u.profile_photo_path, u.role, u.designation
               FROM replies r 
               LEFT JOIN user u ON r.cpf_no = u.cpf_no
               WHERE r.thread_id = ? 

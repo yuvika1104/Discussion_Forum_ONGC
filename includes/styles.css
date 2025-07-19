@@ -1,0 +1,364 @@
+body {
+    background: linear-gradient(180deg, #FDFBF5 0%, #FFFDD0 100%);
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    /* Added for admin page layout */
+    display: flex;
+    flex-direction: column;
+}
+
+.bg-maroon {
+    background: linear-gradient(135deg, #9B3C3C 0%, #B85050 100%);
+}
+
+.text-maroon {
+    color: #9B3C3C;
+}
+
+.bg-cream {
+    background-color: #FFFDD0;
+}
+
+.text-cream {
+    color: #FFFDD0;
+}
+
+.form-container, .session-info, .admin-panel, .card {
+    border-radius: 12px;
+    background-color: #FFFDD0;
+    padding: 2rem;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(123, 45, 45, 0.1);
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0;
+}
+
+.btn-maroon {
+    background: linear-gradient(135deg, #9B3C3C 0%, #B85050 100%);
+    border-color: #9B3C3C;
+    color: #FFFDD0;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-maroon:hover {
+    background: linear-gradient(135deg, #E8B923 0%, #F0D050 100%);
+    border-color: #E8B923;
+    color: #9B3C3C;
+    transform: translateY(-2px);
+}
+
+.form-control:focus {
+    border-color: #9B3C3C;
+    box-shadow: 0 0 8px rgba(123, 45, 45, 0.3);
+    outline: none;
+}
+
+a.text-maroon:hover {
+    color: #E8B923;
+    text-decoration: underline;
+}
+
+header, footer {
+    background: linear-gradient(135deg, #9B3C3C 0%, #B85050 100%);
+}
+
+header a:hover, footer a:hover {
+    color: #E8B923;
+    text-decoration: underline;
+}
+
+.button-container .btn {
+    margin: 0 10px;
+    padding: 12px 24px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+.admin-panel {
+    border-left: 5px solid #9B3C3C;
+    background: linear-gradient(90deg, #FFFDD0 0%, #FDFBF5 100%);
+}
+
+.user-badge.admin {
+    background: linear-gradient(135deg, #9B3C3C 0%, #B85050 100%);
+    color: #FFFDD0;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.profile-img-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 70%;
+    border: 2px solid #9B3C3C;
+    object-fit: cover;
+}
+
+.profile-img-large .initial {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.alert-maroon {
+    border-color: #9B3C3C;
+    background-color: rgba(123, 45, 45, 0.1);
+    color: #333;
+}
+
+.form-select:focus {
+    border-color: #9B3C3C;
+    box-shadow: 0 0 8px rgba(123, 45, 45, 0.3);
+    outline: none;
+}
+
+.border-bottom {
+    border-color: rgba(123, 45, 45, 0.2);
+}
+
+.threads-list .thread-link {
+    display: block;
+    transition: transform 0.2s ease-in-out;
+}
+
+.threads-list .thread-link:hover {
+    transform: translateY(-3px);
+}
+
+.thread {
+    border-radius: 10px;
+}
+
+.thread-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #9B3C3C;
+    object-fit: cover;
+}
+
+.profile-photo .initial {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.profile-photo-wrapper:hover .profile-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.designation, .department {
+    font-size: 0.9rem;
+}
+
+.thread-date {
+    font-size: 0.85rem;
+}
+
+.no-threads {
+    border-radius: 10px;
+}
+
+.thread.card {
+    background-color: #FDF5E6;
+    border-radius: 10px;
+}
+
+.highlight {
+    background-color: #FFF8DC !important;
+    transition: background-color 3s ease;
+}
+
+.image-gallery img {
+    border-radius: 8px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.profile-tooltip {
+    visibility: hidden;
+    width: 200px;
+    background-color: #FFFDD0;
+    color: #333;
+    text-align: left;
+    border-radius: 8px;
+    padding: 10px;
+    position: absolute;
+    z-index: 9999;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 1px solid #9B3C3C;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.profile-photo-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-photo-wrapper .profile-photo {
+    background: linear-gradient(135deg, #9B3C3C 0%, #B85050 100%);
+}
+
+/* New styles for Admin User Management Page */
+
+/* Admin Header Styling */
+.admin-header {
+    background: linear-gradient(135deg, #9B3C3C 0%, #B85050 100%);
+    color: #FFFDD0;
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.admin-header a {
+    color: #FFFDD0;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.admin-header a:hover {
+    color: #E8B923;
+}
+
+/* Main content area padding */
+main {
+    flex-grow: 1; /* Allows main content to take available space */
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Table specific styling */
+.table-container {
+    background-color: #FFFDD0; /* Use your cream color */
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(123, 45, 45, 0.1);
+    padding: 1.5rem; /* Add some padding around the table */
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    background-color: #FDFBF5; /* Lighter stripe for contrast */
+}
+
+.table-hover > tbody > tr:hover > * {
+    background-color: rgba(155, 60, 60, 0.05); /* Light maroon hover effect */
+}
+
+.table thead th {
+    background: linear-gradient(135deg, #9B3C3C 0%, #B85050 100%); /* Maroon gradient for table header */
+    color: #FFFDD0;
+    border-bottom: none; /* Remove default border */
+    vertical-align: middle; /* Center text vertically */
+}
+
+.table tbody td {
+    vertical-align: middle; /* Center content vertically in table cells */
+    padding: 1rem 0.75rem; /* More padding for cells */
+}
+
+/* Profile images in table */
+.profile-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #9B3C3C; /* Maroon border for profile images */
+}
+.profile-img-initial {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #9B3C3C 0%, #B85050 100%); /* Maroon gradient for initial placeholder */
+    color: #FFFDD0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem; /* Larger initial */
+    font-weight: bold;
+    border: 2px solid #9B3C3C;
+}
+
+.action-btns {
+    white-space: nowrap;
+}
+.action-btns .btn {
+    margin-right: 0.5rem; /* Space between buttons */
+    border-radius: 8px; /* Consistent button radius */
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+}
+.action-btns .btn-edit {
+    background: linear-gradient(135deg, #E8B923 0%, #F0D050 100%); /* Gold gradient */
+    border-color: #E8B923;
+    color: #9B3C3C;
+}
+.action-btns .btn-edit:hover {
+    background: linear-gradient(135deg, #F0D050 0%, #E8B923 100%);
+    transform: translateY(-2px);
+}
+.action-btns .btn-delete {
+    background: linear-gradient(135deg, #B85050 0%, #9B3C3C 100%); /* Inverted maroon gradient */
+    border-color: #9B3C3C;
+    color: #FFFDD0;
+}
+.action-btns .btn-delete:hover {
+    background: linear-gradient(135deg, #9B3C3C 0%, #B85050 100%);
+    transform: translateY(-2px);
+}
+
+/* Custom Modal Styling */
+.custom-modal-header {
+    background: linear-gradient(135deg, #9B3C3C 0%, #B85050 100%);
+    color: #FFFDD0;
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    padding: 1rem 1.5rem;
+}
+.custom-modal-header .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%); /* Make close button visible on dark background */
+}
+.custom-modal-body {
+    background-color: #FFFDD0;
+    color: #333;
+    padding: 1.5rem;
+}
+.custom-modal-footer {
+    background-color: #FDFBF5;
+    border-top: 1px solid rgba(123, 45, 45, 0.1);
+    border-radius: 0 0 10px 10px;
+    padding: 1rem 1.5rem;
+}
+.custom-modal-footer .btn {
+    border-radius: 8px;
+    font-weight: 600;
+}
+.custom-modal-footer .btn-secondary {
+    background-color: #ccc;
+    border-color: #ccc;
+    color: #333;
+}
+.custom-modal-footer .btn-secondary:hover {
+    background-color: #bbb;
+    border-color: #bbb;
+}
