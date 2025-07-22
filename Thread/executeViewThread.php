@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once '../Database/db_connect.php';
 
 // Get thread_id from most reliable to least reliable sources

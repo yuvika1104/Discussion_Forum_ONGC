@@ -1,7 +1,7 @@
 <?php
-// Start session at the very beginning
-session_start();
-// require_once 'includes/header.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once '../Database/db_connect.php';
 
 // Initialize message variables if not set
@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else {
                 $_SESSION['message'] = 'Invalid CPF number or password.';
                 $_SESSION['message_type'] = 'danger';
+                header('Location: viewLogin.php');
             }
         } catch (PDOException $e) {
             error_log("Login error: " . $e->getMessage());

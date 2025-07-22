@@ -1,5 +1,7 @@
 <?php 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if (isset($_SESSION['user_cpf'])) {
     header('Location: ../index.php');
     exit;
@@ -22,8 +24,11 @@ if (isset($_SESSION['user_cpf'])) {
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="form-container shadow-lg p-4 bg-cream">
-                    <h2 class="text-center mb-4"><i class="fas fa-sign-in-alt text-maroon"></i> Login to Forum</h2>
                     
+                    <h2 class="text-center mb-4"><i class="fas fa-sign-in-alt text-maroon"></i> Login to Forum</h2>
+                    <?php if(isset($_SESSION['message'])&& isset($_SESSION['message_type']) && $_SESSION['message_type']=='danger'): ?>
+                                <h5 class="text-center mb-4" style="color: maroon"><?php echo $_SESSION['message']; ?></h5>
+                        <?php endif; ?>
                     <form method="POST" action="executeLogin.php">
                         <div class="mb-3">
                             <label for="cpf_no" class="form-label text-maroon">CPF Number</label>

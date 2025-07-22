@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if (isset($_SESSION['user_cpf'])) {
     header('Location: ../index.php');
     exit;
@@ -25,10 +27,18 @@ if (isset($_SESSION['user_cpf'])) {
                     <i class="fas fa-key me-2"></i> Reset Password
                 </h2>
                 
-                <?php if (isset($_SESSION['forgot_message'])): ?>
-                    <div class="alert <?php echo isset($_SESSION['message_type']) && $_SESSION['message_type'] == 'error' ? 'alert-danger' : 'alert-success'; ?> alert-maroon fade show" role="alert">
+                <?php if (isset($_SESSION['forgot_message']) && isset($_SESSION['message_type']) && $_SESSION['message_type'] == 'danger' ): ?>
+                    <div class="alert alert-danger alert-maroon fade show" role="alert">
                         <?php echo htmlspecialchars($_SESSION['forgot_message']); 
                         unset($_SESSION['forgot_message']);
+                        unset($_SESSION['message_type']); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['message']) && isset($_SESSION['message_type']) && $_SESSION['message_type'] == 'danger' ): ?>
+                    <div class="alert alert-danger alert-maroon fade show" role="alert">
+                        <?php echo htmlspecialchars($_SESSION['message']); 
+                        unset($_SESSION['message']);
                         unset($_SESSION['message_type']); ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>

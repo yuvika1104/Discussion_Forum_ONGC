@@ -1,6 +1,21 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once '../Database/db_connect.php';
+
+
+if (isset($_SESSION['user_cpf'])) {
+    header('Location: ../index.php');
+    exit;
+}
+// Redirect if no CPF/OTP session exists
+if (!isset($_SESSION['reset_cpf'])) {
+    $_SESSION['forgot_message'] = "Session expired. Please start again.";
+    $_SESSION['message_type'] = 'danger';
+    header('Location: viewForgotPassword.php');
+    exit;
+}
 
 // Redirect if not a POST request or missing session data
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_SESSION['reset_otp'])) {

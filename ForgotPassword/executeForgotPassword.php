@@ -1,6 +1,13 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once '../Database/db_connect.php';
+
+if (isset($_SESSION['user_cpf'])) {
+    header('Location: ../index.php');
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cpf_no = filter_input(INPUT_POST, 'cpf_no', FILTER_SANITIZE_STRING);

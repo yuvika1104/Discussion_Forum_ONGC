@@ -1,6 +1,14 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once '../Database/db_connect.php';
+
+
+if (isset($_SESSION['user_cpf'])) {
+    header('Location: ../index.php');
+    exit;
+}
 
 // Check if we have the required session data
 if (!isset($_SESSION['reset_cpf'])) {
@@ -26,9 +34,9 @@ $headers = "From: no-reply@yourdomain.com";
 
 // mail($to, $subject, $message, $headers); // Uncomment in production
 
-// For demo purposes
-$_SESSION['otp_message'] = "New OTP sent (Demo OTP: $otp)";
-$_SESSION['otp_message_type'] = 'success';
+// // For demo purposes
+// $_SESSION['otp_message'] = "New OTP sent (Demo OTP: $otp)";
+// $_SESSION['otp_message_type'] = 'success';
 
 header('Location: viewVerifyOTP.php');
 exit;

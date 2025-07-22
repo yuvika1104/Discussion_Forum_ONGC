@@ -1,13 +1,21 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (isset($_SESSION['user_cpf'])) {
+    header('Location: ../index.php');
+    exit;
+}
 // Redirect if no CPF/OTP session exists
 if (!isset($_SESSION['reset_cpf']) || !isset($_SESSION['reset_otp'])) {
+    $_SESSION['forgot_message'] = "Session expired. Please start again.";
+    $_SESSION['message_type'] = 'danger';
     header('Location: viewForgotPassword.php');
     exit;
 }
 // Note: echo $_SESSION['reset_otp']; should probably be removed in a production environment
 // as it displays the OTP directly on the page, which is a security risk.
-// I'm leaving it as per your original code, but strongly recommend removing it.
 echo $_SESSION['reset_otp']; 
 ?>
 <!DOCTYPE html>
@@ -31,8 +39,8 @@ echo $_SESSION['reset_otp'];
                     <i class="fas fa-shield-alt me-2"></i> Verify OTP
                 </h2>
                 
-                <?php if (isset($_SESSION['otp_message'])): ?>
-                    <div class="alert <?php echo isset($_SESSION['otp_message_type']) && $_SESSION['otp_message_type'] == 'error' ? 'alert-danger' : 'alert-success'; ?> alert-maroon fade show" role="alert">
+                <?php if (isset($_SESSION['otp_message']) &&  isset($_SESSION['otp_message_type']) && $_SESSION['otp_message_type'] == 'danger'): ?>
+                    <div class="alert alert-danger alert-maroon fade show" role="alert">
                         <?php echo htmlspecialchars($_SESSION['otp_message']); ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>

@@ -1,5 +1,7 @@
 <?php
-// session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once '../includes/header.php';
 require_once 'executeViewThread.php';
 // echo $thread['profile_photo_path'];

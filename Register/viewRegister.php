@@ -1,6 +1,7 @@
 <?php
-session_start();
-require_once '../includes/header.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once '../Database/db_connect.php';
 
 // Redirect if already logged in
@@ -29,7 +30,7 @@ if (isset($_SESSION['user_cpf'])) {
                 <div class="form-container shadow-lg bg-cream">
                     <h2 class="text-maroon mb-4"><i class="fas fa-user-plus text-maroon me-2"></i>Register for Forum</h2>
                     
-                    <?php if (isset($_SESSION['message']) && isset($_SESSION['message_type'])): ?>
+                    <?php if (isset($_SESSION['message']) && isset($_SESSION['message_type']) && $_SESSION['message_type']=='danger'): ?>
                         <div class="alert alert-<?= $_SESSION['message_type'] ?> alert-maroon">
                             <?= $_SESSION['message'] ?>
                         </div>
