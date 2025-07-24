@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once '../Database/db_connect.php';
 
-
+// Redirect if user is already logged in
 if (isset($_SESSION['user_cpf'])) {
     header('Location: ../index.php');
     exit;
@@ -18,25 +18,50 @@ if (!isset($_SESSION['reset_cpf'])) {
     exit;
 }
 
+// Include PHPMailer files manually
+require '../includes/PHPMailer-master/src/PHPMailer.php';
+require '../includes/PHPMailer-master/src/SMTP.php';
+require '../includes/PHPMailer-master/src/Exception.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 // Generate new OTP
-$otp = rand(100000, 999999);
+$otp = random_int(100000, 999999); // More secure than rand()
 $otp_expiry = date('Y-m-d H:i:s', strtotime('+15 minutes'));
 
 // Update session with new OTP
 $_SESSION['reset_otp'] = $otp;
 $_SESSION['otp_expiry'] = $otp_expiry;
 
-// In production: Resend the email
-$to = $_SESSION['reset_email'];
-$subject = "New Password Reset OTP";
-$message = "Your new OTP is: $otp";
-$headers = "From: no-reply@yourdomain.com";
+// Send new OTP via email using PHPMailer
+$mail = new PHPMailer(true);
+try {
+    // SMTP settings for Gmail
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    $mail->Username ='' ; // Your Gmail address
+    $mail->Password = ''; // App Password from Gmail
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = 587;
 
-// mail($to, $subject, $message, $headers); // Uncomment in production
+    // Email content
+    $mail->setFrom('yuvikagupta1104@gmail.com', 'ONGC Forum');
+    $mail->addAddress($_SESSION['reset_email']);
+    $mail->Subject = 'New Password Reset OTP';
+    $mail->Body = "Your new OTP for password reset is: $otp\nThis OTP is valid for 15 minutes.";
+    $mail->AltBody = "Your new OTP for password reset is: $otp\nThis OTP is valid for 15 minutes."; // Plain text version
 
-// // For demo purposes
-// $_SESSION['otp_message'] = "New OTP sent (Demo OTP: $otp)";
-// $_SESSION['otp_message_type'] = 'success';
+    // Send email
+    $mail->send();
+    $_SESSION['otp_message'] = "New OTP sent to your registered email (Demo OTP: $otp)"; // Include OTP for testing
+    $_SESSION['otp_message_type'] = 'success';
+} catch (Exception $e) {
+    $_SESSION['otp_message'] = "Failed to send new OTP: {$mail->ErrorInfo}";
+    $_SESSION['otp_message_type'] = 'danger';
+}
 
 header('Location: viewVerifyOTP.php');
 exit;

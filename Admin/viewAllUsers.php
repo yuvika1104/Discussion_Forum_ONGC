@@ -1,4 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once '../Database/db_connect.php';
 require_once '../Auth/admin_session_check.php'; // Ensure this checks for admin privileges
 
@@ -30,6 +33,10 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <a href="../index.php" class="btn btn-outline-light btn-sm me-2 rounded-pill">
                     <i class="fas fa-home me-1"></i> Dashboard
                 </a>
+                <a href="viewAddUser.php" class="btn btn-outline-light btn-sm me-2 rounded-pill">
+                    <i class="fas fa-user-plus me-1"></i> Add User
+                </a>
+                
                 
             </div>
         </div>

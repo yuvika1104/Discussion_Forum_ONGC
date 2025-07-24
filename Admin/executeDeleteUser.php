@@ -1,4 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once '../Database/db_connect.php';
 require_once '../Auth/admin_session_check.php';
 
