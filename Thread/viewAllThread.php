@@ -9,6 +9,7 @@ require_once '../Database/db_connect.php';
 $sql = "SELECT t.*, u.name as user_name, u.department, u.bio,u.profile_photo_path, u.role, u.designation
         FROM threads t 
         LEFT JOIN user u ON t.cpf_no = u.cpf_no
+        where t.active=1
         ORDER BY t.created_at DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
@@ -29,10 +30,28 @@ $threads = $stmt->fetchAll();
     <?php require_once '../includes/header.php'; ?>
     
     <div class="container my-5">
+        <!-- Search Bar and Create New Thread Button -->
+        <div class="mb-4">
+            <div class="input-group">
+                <span class="input-group-text  border-maroon" style="background: linear-gradient(135deg, #ac4c4cff 0%, #b55e5eff 100%);">
+                    <i class="fas fa-search text-black"></i>
+                </span>
+                <input type="text" id="threadSearch" class="form-control border-maroon" 
+                       placeholder="Search threads..." 
+                       style="background-color: #FDF5E6;">
+                <a href="viewCreateThread.php" class="btn text-cream border-maroon" style="background: linear-gradient(135deg, #ac4c4cff 0%, #b55e5eff 100%);">
+                    <i class="fas fa-plus me-1"></i> Create New
+                </a>
+            </div>
+        </div>
+
         <?php if (count($threads) > 0): ?>
             <div class="threads-list">
                 <?php foreach ($threads as $thread): ?>
-                    <a href="../Thread/viewThread.php?id=<?= $thread['thread_id'] ?>" class="thread-link text-decoration-none">
+                    <a href="../Thread/viewThread.php?id=<?= $thread['thread_id'] ?>" class="thread-link text-decoration-none"
+                    data-title="<?= htmlspecialchars($thread['title']) ?>" 
+                       data-username="<?= htmlspecialchars($thread['user_name'] ?? 'Unknown User') ?>">
+
                         <div class="thread card shadow-lg bg-cream mb-3">
                             <div class="card-body">
                                 <div class="thread-header d-flex align-items-center">
@@ -109,5 +128,6 @@ $threads = $stmt->fetchAll();
     <?php require_once '../includes/footer.php'; ?>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="validateViewAllThread.js"></script>
 </body>
 </html>

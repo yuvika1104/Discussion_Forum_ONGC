@@ -23,7 +23,7 @@ else {
 $sql = "SELECT t.*, u.name as user_name, u.department,u.bio, u.profile_photo_path, u.role, u.designation
         FROM threads t 
         LEFT JOIN user u ON t.cpf_no = u.cpf_no
-        WHERE t.thread_id = ?";
+        WHERE t.thread_id = ? and t.active=1";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$thread_id]);
 $thread = $stmt->fetch();
@@ -45,7 +45,7 @@ $thread_images = $img_stmt->fetchAll();
 $reply_sql = "SELECT r.*, u.name as user_name, u.bio,u.department, u.profile_photo_path, u.role, u.designation
               FROM replies r 
               LEFT JOIN user u ON r.cpf_no = u.cpf_no
-              WHERE r.thread_id = ? 
+              WHERE r.thread_id = ? and r.active=1
               ORDER BY r.created_at ASC";
 $reply_stmt = $pdo->prepare($reply_sql);
 $reply_stmt->execute([$thread_id]);
@@ -165,13 +165,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $owner_id = $check_stmt->fetchColumn();
                 
                 if ($owner_id == $user_cpf || $user_role == '1') {
-                    // First delete thread images
-                    $delete_images_sql = "DELETE FROM thread_images WHERE thread_id = ?";
-                    $delete_images_stmt = $pdo->prepare($delete_images_sql);
-                    $delete_images_stmt->execute([$item_id]);
+                    // // First delete thread images
+                    // $delete_images_sql = "DELETE FROM thread_images WHERE thread_id = ?";
+                    // $delete_images_stmt = $pdo->prepare($delete_images_sql);
+                    // $delete_images_stmt->execute([$item_id]);
                     
                     // Then delete the thread
-                    $delete_sql = "DELETE FROM threads WHERE thread_id = ?";
+                    $delete_sql = "UPDATE threads SET active=0 WHERE thread_id = ?";
                     $delete_stmt = $pdo->prepare($delete_sql);
                     $delete_stmt->execute([$item_id]);
                     
@@ -188,13 +188,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $owner_id = $check_stmt->fetchColumn();
                 
                 if ($owner_id == $user_cpf || $user_role == '1') {
-                    // First delete reply images
-                    $delete_images_sql = "DELETE FROM reply_images WHERE reply_id = ?";
-                    $delete_images_stmt = $pdo->prepare($delete_images_sql);
-                    $delete_images_stmt->execute([$item_id]);
+                    // // First delete reply images
+                    // $delete_images_sql = "DELETE FROM reply_images WHERE reply_id = ?";
+                    // $delete_images_stmt = $pdo->prepare($delete_images_sql);
+                    // $delete_images_stmt->execute([$item_id]);
                     
                     // Then delete the reply
-                    $delete_sql = "DELETE FROM replies WHERE reply_id = ?";
+                    $delete_sql = "UPDATE replies SET active=0 WHERE reply_id = ?";
                     $delete_stmt = $pdo->prepare($delete_sql);
                     $delete_stmt->execute([$item_id]);
                     

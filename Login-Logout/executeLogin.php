@@ -23,11 +23,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['message_type'] = 'danger';
     } else {
         try {
-            $sql = "SELECT cpf_no, name, email, hashed_password, role FROM user WHERE cpf_no = ?";
+            $sql = "SELECT cpf_no, name, email, hashed_password, role, active FROM user WHERE cpf_no = ?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$cpf_no]);
             $user = $stmt->fetch();
-            
+            if($user['active']!= 1)
+            {
+                $_SESSION['message'] = 'Your acount is inactive. Please contact the Administrator.';
+                $_SESSION['message_type'] = 'danger';
+                header('Location: viewLogin.php');
+            }
+            else
+            {
             if ($user && password_verify($password, $user['hashed_password'])) {
                 // Regenerate session ID to prevent fixation
                 session_regenerate_id(true);
@@ -47,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['message'] = 'Invalid CPF number or password.';
                 $_SESSION['message_type'] = 'danger';
                 header('Location: viewLogin.php');
+            }
             }
         } catch (PDOException $e) {
             error_log("Login error: " . $e->getMessage());

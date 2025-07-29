@@ -252,7 +252,6 @@ require_once 'executeViewThread.php';
         <!-- Reply Form -->
         <?php if (isset($_SESSION['user_cpf'])): ?>
             <div class="mt-4">
-                <h4 class="text-maroon"><i class="fas fa-reply text-maroon me-2"></i> Post a Reply</h4>
                 <form method="POST" enctype="multipart/form-data" class="reply-form card shadow-lg" action="executeViewThread.php">
                     <div class="card-body">
                         <input type="hidden" name="thread_id" value="<?= $thread['thread_id'] ?>">

@@ -29,21 +29,32 @@ if (!$user) {
 }
 
 // Get user's threads and replies count
-$threads_sql = "SELECT COUNT(*) FROM threads WHERE cpf_no = ?";
+$threads_sql = "SELECT COUNT(*) FROM threads WHERE cpf_no = ? and active=1";
 $threads_stmt = $pdo->prepare($threads_sql);
 $threads_stmt->execute([$user_cpf]);
 $threads_count = $threads_stmt->fetchColumn();
 
-$replies_sql = "SELECT COUNT(*) FROM replies WHERE cpf_no = ?";
+$replies_sql = "SELECT COUNT(*) FROM replies WHERE cpf_no = ? and active=1";
 $replies_stmt = $pdo->prepare($replies_sql);
 $replies_stmt->execute([$user_cpf]);
 $replies_count = $replies_stmt->fetchColumn();
 
 // Get user's recent threads
-$recent_threads_sql = "SELECT thread_id, title, created_at FROM threads WHERE cpf_no = ? ORDER BY created_at DESC LIMIT 5";
+$recent_threads_sql = "SELECT thread_id, title, created_at FROM threads WHERE cpf_no = ? and active=1 ORDER BY created_at DESC LIMIT 5";
 $recent_threads_stmt = $pdo->prepare($recent_threads_sql);
 $recent_threads_stmt->execute([$user_cpf]);
 $recent_threads = $recent_threads_stmt->fetchAll();
+
+// Get user's recent replies
+$recent_replies_sql = "SELECT r.reply_id, r.thread_id, r.content, r.created_at, t.title 
+                       FROM replies r 
+                       JOIN threads t ON r.thread_id = t.thread_id 
+                       WHERE r.cpf_no = ? and r.active=1 and t.active=1
+                       ORDER BY r.created_at DESC 
+                       LIMIT 5";
+$recent_replies_stmt = $pdo->prepare($recent_replies_sql);
+$recent_replies_stmt->execute([$user_cpf]);
+$recent_replies = $recent_replies_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -69,9 +80,8 @@ $recent_threads = $recent_threads_stmt->fetchAll();
                             <img src="../Uploads/profiles/<?= htmlspecialchars($user['profile_photo_path']) ?>" 
                                  class="profile-img-large mb-3" alt="Profile">
                         <?php else: ?>
-                            <div class="profile-img-large bg-maroon text-cream d-flex align-items-center justify-content-center mb-3 mx-auto">
-                                <span class="initial"><?= strtoupper(substr($user['name'], 0, 1)) ?></span>
-                            </div>
+                             <img src="../Uploads/profiles/default_user.png" 
+                                 class="profile-img-large mb-3" alt="Profile">
                         <?php endif; ?>
                         
                         <h4 class="text-maroon"><?= htmlspecialchars($user['name']) ?></h4>
@@ -272,6 +282,36 @@ $recent_threads = $recent_threads_stmt->fetchAll();
                                         <?= date('M j, Y', strtotime($thread['created_at'])) ?>
                                     </small>
                                 </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Recent Replies -->
+                <?php if (!empty($recent_replies)): ?>
+                    <div class="card shadow-lg bg-cream mt-4">
+                        <div class="card-header bg-maroon text-cream">
+                            <h5 class="card-title mb-0">
+                            <i class="fas fa-comment-dots me-1"></i> Your Recent Replies
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <?php foreach ($recent_replies as $reply): ?>
+                                <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                                    <div>
+                                        <a href="../Thread/viewThread.php?id=<?= $reply['thread_id'] ?>" class="text-decoration-none text-maroon">
+                            <?php
+                            // Truncate reply content to 50 characters for brevity
+                            $content = htmlspecialchars($reply['content']);
+                            $display_content = strlen($content) > 50 ? substr($content, 0, 50) . '...' : $content;
+                            ?>
+                            <?= $display_content ?> <small>(in "<?= htmlspecialchars($reply['title']) ?>")</small>
+                                    </a>
+                            </div>
+                            <small class="text-muted">
+                            <?= date('M j, Y', strtotime($reply['created_at'])) ?>
+                            </small>
+                            </div>
                             <?php endforeach; ?>
                         </div>
                     </div>

@@ -60,10 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         try {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             
-            $sql = "INSERT INTO user (cpf_no, name, email, department, hashed_password, designation, phone_number, role) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO user (cpf_no, name, email, department, hashed_password, designation, phone_number, role,active) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
             $stmt = $pdo->prepare($sql);
-            $stmt->execute([$cpf_no, $name, $email, $department, $hashed_password, $designation, $phone_number, $role_no]);
+            $stmt->execute([$cpf_no, $name, $email, $department, $hashed_password, $designation, $phone_number, $role_no,1]);
             
             $_SESSION['message'] = 'Registration successful! New user added.';
             $_SESSION['message_type'] = 'success';

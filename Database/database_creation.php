@@ -26,8 +26,20 @@ $conn->select_db($dbname);
 
 //  Create tables if they do not exist
 $sql = "
-ALTER TABLE user 
-ADD COLUMN role TINYINT NOT NULL DEFAULT 0 ;
+CREATE TABLE IF NOT EXISTS user (
+    cpf_no CHAR(5) PRIMARY KEY,                         
+    email VARCHAR(255) NOT NULL UNIQUE,                 
+    phone_number VARCHAR(15),                           
+    name VARCHAR(100) NOT NULL,                         
+    designation VARCHAR(100),                           
+    department VARCHAR(100),                            
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,    
+    bio TEXT,                                          
+    profile_photo_path VARCHAR(255),                   
+    hashed_password VARCHAR(255) NOT NULL,              
+    role TINYINT NOT NULL DEFAULT 0 ,                    
+    active TINYINT NOT NULL DEFAULT 1                
+)
 ";
 
 if ($conn->query($sql) === TRUE) {

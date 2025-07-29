@@ -17,25 +17,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_cpf'])) {
         exit();
     }
 
+    $flag=false;
+    
     try {
         // Begin transaction
         $pdo->beginTransaction();
-
-        // Delete user
+        $stmt=$pdo->prepare("SELECT active from user  WHERE cpf_no = ?");
+        $stmt->execute([$user_cpf]);
+        $active_status=  $stmt->fetch();
+        if ($active_status && $active_status['active'] == 2) {
+            $flag = true;
+        }
+        // Activate user
         $stmt = $pdo->prepare("UPDATE user  SET active= ? WHERE cpf_no = ?");
-        $stmt->execute([0,$user_cpf]);
+        $stmt->execute([1,$user_cpf]);
         
         $pdo->commit();
         
-        $_SESSION['message'] = "User deleted successfully";
+        $_SESSION['message'] = "User activated successfully";
         $_SESSION['message_type'] = "success";
     } catch (PDOException $e) {
         $pdo->rollBack();
-        $_SESSION['message'] = "Error deleting user: " . $e->getMessage();
+        $_SESSION['message'] = "Error activating user: " . $e->getMessage();
         $_SESSION['message_type'] = "danger";
     }
-    
-    header("Location: viewAllUsers.php");
+    if($flag)
+    {
+        header("Location: viewAllUsers.php");
+    }
+    else
+    {
+        header("Location: viewDeactivatedUser.php");
+    }
     exit();
 } else {
     header("Location: viewAllUsers.php");

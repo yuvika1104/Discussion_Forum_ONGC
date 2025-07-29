@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS user (
     bio TEXT,                                           -- Description or bio
     profile_photo_path VARCHAR(255),                    -- Path to profile image
     hashed_password VARCHAR(255) NOT NULL,              -- Hashed password
-    role TINYINT NOT NULL DEFAULT 0                     -- User role (0=regular, 1=admin, etc.)
+    role TINYINT NOT NULL DEFAULT 0 ,                    -- User role (0=regular, 1=admin, etc.)
+    active TINYINT NOT NULL DEFAULT 2                  -- active or not or new
 );
 
 
@@ -19,7 +20,7 @@ CREATE TABLE  IF NOT EXISTS threads (
     content TEXT NOT NULL
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- Timestamp of thread creation
     cpf_no CHAR(5),                                     -- Foreign key referencing user
-
+    active TINYINT NOT NULL DEFAULT 1,                  -- active or not
     FOREIGN KEY (cpf_no) REFERENCES user(cpf_no)
         ON DELETE SET NULL                              -- Set cpf_no to NULL if user is deleted
 );
@@ -31,6 +32,7 @@ CREATE TABLE  IF NOT EXISTS replies (
     cpf_no CHAR(5),                                     -- Foreign key referencing user
     content TEXT NOT NULL,                              -- Reply text content
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- Timestamp of reply creation
+    active TINYINT NOT NULL DEFAULT 1,                  -- active or not
 
     FOREIGN KEY (thread_id) REFERENCES threads(thread_id)
         ON DELETE CASCADE,                              -- Delete replies if thread is deleted

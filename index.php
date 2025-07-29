@@ -1,6 +1,9 @@
 <?php 
 session_start();
+header("Location: Thread/viewAllThread.php");
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
