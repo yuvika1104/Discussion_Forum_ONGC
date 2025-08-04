@@ -4,6 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require_once '../Database/db_connect.php';
+require_once '../password.php';
 
 // Redirect if user is already logged in
 if (isset($_SESSION['user_cpf'])) {
@@ -42,17 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Send OTP via email using PHPMailer
         $mail = new PHPMailer(true);
         try {
+        
             // SMTP settings for Gmail
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'yuvikagupta1104@gmail.com'; // Your Gmail address
-            $mail->Password = ''; // App Password from Gmail
+            $mail->Username = SENDER_MAIL; // Your Gmail address
+            $mail->Password = APP_PASSWORD_FOR_MAIL; // App Password from Gmail
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
             // Email content
-            $mail->setFrom('yuvikagupta1104@gmail.com', 'ONGC Forum');
+            $mail->setFrom(SENDER_MAIL, 'ONGC Forum');
             $mail->addAddress($user['email']);
             $mail->Subject = 'Password Reset OTP';
             $mail->Body = "Your OTP for password reset is: $otp \nThis OTP is valid for 15 minutes.";
@@ -64,10 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['message_type'] = 'success';
             header('Location: viewVerifyOTP.php');
             exit;
-        } catch (Exception $e) {
+        } catch (Exception $e) 
+        {
+            echo $mail->ErrorInfo;
             $_SESSION['forgot_message'] = "Failed to send OTP: {$mail->ErrorInfo}";
             $_SESSION['message_type'] = 'danger';
-            header('Location: viewForgotPassword.php');
+            // header('Location: viewForgotPassword.php');
             exit;
         }
     } else {

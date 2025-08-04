@@ -16,7 +16,7 @@ if (!isset($_SESSION['reset_cpf']) || !isset($_SESSION['reset_otp'])) {
 }
 // Note: echo $_SESSION['reset_otp']; should probably be removed in a production environment
 // as it displays the OTP directly on the page, which is a security risk.
-echo $_SESSION['reset_otp']; 
+// echo $_SESSION['reset_otp']; 
 ?>
 <!DOCTYPE html>
 <html lang="en">

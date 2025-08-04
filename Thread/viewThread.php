@@ -4,7 +4,6 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once '../includes/header.php';
 require_once 'executeViewThread.php';
-// echo $thread['profile_photo_path'];
 ?>
 
 <!DOCTYPE html>
@@ -59,47 +58,44 @@ require_once 'executeViewThread.php';
                             <img src="../Uploads/profiles/default_user.png" 
                                  class="profile-img" alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
                         <?php endif; ?>
-                                 <div class="profile-tooltip">
-                                 <?php if ($thread['user_name']): ?>
-                                    <h6 class="text-maroon mb-1"><?php echo htmlspecialchars($thread['user_name']); ?></h6>
-                                <?php else: ?>
-                                    <h6 class="text-maroon mb-1">Unkown User</h6>
-                                <?php endif; ?>
-                                
-                                <?php if ($thread['designation']): ?>
-                                    <p class="text-muted small mb-1">
-                                        <i class="fas fa-id-badge text-maroon me-1"></i>
-                                        <?php echo htmlspecialchars($thread['designation']); ?>
-                                    </p>
-                                <?php endif; ?>
-                                <?php if ($thread['department']): ?>
+                        <div class="profile-tooltip">
+                            <?php if ($thread['user_name']): ?>
+                                <h6 class="text-maroon mb-1"><?php echo htmlspecialchars($thread['user_name']); ?></h6>
+                            <?php else: ?>
+                                <h6 class="text-maroon mb-1">Unknown User</h6>
+                            <?php endif; ?>
+                            <?php if ($thread['designation']): ?>
+                                <p class="text-muted small mb-1">
+                                    <i class="fas fa-id-badge text-maroon me-1"></i>
+                                    <?php echo htmlspecialchars($thread['designation']); ?>
+                                </p>
+                            <?php endif; ?>
+                            <?php if ($thread['department']): ?>
                                 <p class="text-muted small mb-1">
                                     <i class="fas fa-building text-maroon me-1"></i>
                                     <?php echo htmlspecialchars($thread['department']); ?>
                                 </p>
-                                <?php endif; ?>
-                                <?php if ($thread['bio']): ?>
+                            <?php endif; ?>
+                            <?php if ($thread['bio']): ?>
                                 <p class="text-muted small mb-1">
                                     <i class="fas fa-pen text-maroon me-1"></i>
                                     <?php echo htmlspecialchars($thread['bio']); ?>
                                 </p>
-                                <?php endif; ?>
-                                <?php if ($thread['role'] == '1'): ?>
-                                    <span class="user-badge admin">Admin</span>
-                                <?php endif; ?>
-                            </div>
-                        
+                            <?php endif; ?>
+                            <?php if ($thread['role'] == '1'): ?>
+                                <span class="user-badge admin">Admin</span>
+                            <?php endif; ?>
+                        </div>
                     </div>
                     <div class="flex-grow-1">
                         <div class="thread-meta">
                             <span class="me-3">
                                 <i class="fas fa-user text-maroon"></i>
                                 <?php if ($thread['user_name']): ?>
-                                   <?php echo htmlspecialchars($thread['user_name']); ?>
+                                    <?php echo htmlspecialchars($thread['user_name']); ?>
                                 <?php else: ?>
-                                    <?php echo "Unkown User"; ?>
+                                    Unknown User
                                 <?php endif; ?>
-                                
                                 <?php if ($thread['role'] == '1'): ?>
                                     <span class="user-badge admin">Admin</span>
                                 <?php endif; ?>
@@ -120,7 +116,10 @@ require_once 'executeViewThread.php';
                     <div class="image-gallery">
                         <?php foreach ($thread_images as $image): ?>
                             <img src="../Uploads/threads/<?php echo htmlspecialchars($image['image_path']); ?>" 
-                                 alt="Thread image" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                 alt="Thread image" class="img-thumbnail image-preview" 
+                                 style="width: 50px; height: 50px; object-fit: cover; cursor: pointer;" 
+                                 data-bs-toggle="modal" data-bs-target="#imageModal" 
+                                 data-image="../Uploads/threads/<?php echo htmlspecialchars($image['image_path']); ?>">
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
@@ -141,51 +140,48 @@ require_once 'executeViewThread.php';
                             <div class="d-flex align-items-start justify-content-between">
                                 <div class="d-flex align-items-start flex-grow-1">
                                     <div class="profile-photo-wrapper me-3">
-                                            <?php if($reply['profile_photo_path']) : ?>
+                                        <?php if ($reply['profile_photo_path']): ?>
                                             <img src="../Uploads/profiles/<?php echo htmlspecialchars($reply['profile_photo_path']); ?>" 
                                                  class="profile-img" alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
-                                            <?php else: ?>
-                                                <img src="../Uploads/profiles/default_user.png" 
+                                        <?php else: ?>
+                                            <img src="../Uploads/profiles/default_user.png" 
                                                  class="profile-img" alt="Profile" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
-                                            <?php endif; ?>
-                                            <div class="profile-tooltip">
-                                                <?php if($reply['user_name']) : ?>
-                                                    <h6 class="text-maroon mb-1"><?php echo htmlspecialchars($reply['user_name']); ?></h6>
+                                        <?php endif; ?>
+                                        <div class="profile-tooltip">
+                                            <?php if ($reply['user_name']): ?>
+                                                <h6 class="text-maroon mb-1"><?php echo htmlspecialchars($reply['user_name']); ?></h6>
                                             <?php else: ?>
-                                                <h6 class="text-maroon mb-1">Unkown User</h6>
+                                                <h6 class="text-maroon mb-1">Unknown User</h6>
                                             <?php endif; ?>
-                                                
-                                                <?php if ($reply['designation']): ?>
-                                                    <p class="text-muted small mb-1">
-                                                        <i class="fas fa-id-badge text-maroon me-1"></i>
-                                                        <?php echo htmlspecialchars($reply['designation']); ?>
-                                                    </p>
-                                                <?php endif; ?>
-                                                <?php if ($reply['department']): ?>
+                                            <?php if ($reply['designation']): ?>
+                                                <p class="text-muted small mb-1">
+                                                    <i class="fas fa-id-badge text-maroon me-1"></i>
+                                                    <?php echo htmlspecialchars($reply['designation']); ?>
+                                                </p>
+                                            <?php endif; ?>
+                                            <?php if ($reply['department']): ?>
                                                 <p class="text-muted small mb-1">
                                                     <i class="fas fa-building text-maroon me-1"></i>
                                                     <?php echo htmlspecialchars($reply['department']); ?>
                                                 </p>
-                                                <?php endif; ?>
-                                                <?php if ($reply['bio']): ?>
-                                                    <p class="text-muted small mb-1">
-                                                       <i class="fas fa-pen text-maroon me-1"></i>
-                                                        <?php echo htmlspecialchars($reply['bio']); ?>
-                                                    </p>
-                                                <?php endif; ?>
-                                             
-                                            </div>
-                                        
+                                            <?php endif; ?>
+                                            <?php if ($reply['bio']): ?>
+                                                <p class="text-muted small mb-1">
+                                                    <i class="fas fa-pen text-maroon me-1"></i>
+                                                    <?php echo htmlspecialchars($reply['bio']); ?>
+                                                </p>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                     <div class="flex-grow-1">
                                         <div class="reply-content">
                                             <div class="thread-meta mb-2">
                                                 <span class="me-3">
                                                     <i class="fas fa-user text-maroon"></i>
-                                                    <?php if($reply['user_name']) : ?>
-                                                    <?php echo htmlspecialchars($reply['user_name']); ?>
+                                                    <?php if ($reply['user_name']): ?>
+                                                        <?php echo htmlspecialchars($reply['user_name']); ?>
                                                     <?php else: ?>
-                                                        <?php echo "Unkown User"; ?>
+                                                        Unknown User
                                                     <?php endif; ?>
                                                     <?php if ($reply['role'] == '1'): ?>
                                                         <span class="user-badge admin">Admin</span>
@@ -201,7 +197,6 @@ require_once 'executeViewThread.php';
                                             </div>
                                             
                                             <?php
-                                            // Get reply images
                                             $reply_img_sql = "SELECT image_path FROM reply_images WHERE reply_id = ?";
                                             $reply_img_stmt = $pdo->prepare($reply_img_sql);
                                             $reply_img_stmt->execute([$reply['reply_id']]);
@@ -211,7 +206,10 @@ require_once 'executeViewThread.php';
                                                 <div class="image-gallery">
                                                     <?php foreach ($reply_images as $image): ?>
                                                         <img src="../Uploads/replies/<?php echo htmlspecialchars($image['image_path']); ?>" 
-                                                             alt="Reply image" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                                             alt="Reply image" class="img-thumbnail image-preview" 
+                                                             style="width: 50px; height: 50px; object-fit: cover; cursor: pointer;" 
+                                                             data-bs-toggle="modal" data-bs-target="#imageModal" 
+                                                             data-image="../Uploads/replies/<?php echo htmlspecialchars($image['image_path']); ?>">
                                                     <?php endforeach; ?>
                                                 </div>
                                             <?php endif; ?>
@@ -292,9 +290,41 @@ require_once 'executeViewThread.php';
         <?php endif; ?>
     </div>
 
+    <!-- Image Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-body ">
+            <div class="modal-content modal-body ">
+                <div class="modal-header">
+                    <h5 class="modal-title text-maroon" id="imageModalLabel">Image Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="" id="modalImage" class="img-fluid" alt="Preview" style="max-height: 70vh; object-fit: contain;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-maroon" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <?php require_once '../includes/footer.php'; ?>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // JavaScript to set the modal image source dynamically
+        document.addEventListener('DOMContentLoaded', function () {
+            const imagePreviews = document.querySelectorAll('.image-preview');
+            const modalImage = document.getElementById('modalImage');
+
+            imagePreviews.forEach(image => {
+                image.addEventListener('click', function () {
+                    const imageSrc = this.getAttribute('data-image');
+                    modalImage.setAttribute('src', imageSrc);
+                });
+            });
+        });
+    </script>
     <script src="validateViewThread.js"></script>
 </body>
 </html>

@@ -3,6 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require_once '../Database/db_connect.php';
+require_once '../password.php';
 
 // Redirect if user is already logged in
 if (isset($_SESSION['user_cpf'])) {
@@ -42,13 +43,13 @@ try {
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
-    $mail->Username ='yuvikagupta1104@gmail.com'; // Your Gmail address
-    $mail->Password = ''; // App Password from Gmail
+    $mail->Username = SENDER_MAIL; // Your Gmail address
+    $mail->Password = APP_PASSWORD_FOR_MAIL; // App Password from Gmail
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
 
     // Email content
-    $mail->setFrom('yuvikagupta1104@gmail.com', 'ONGC Forum');
+    $mail->setFrom(SENDER_MAIL, 'ONGC Forum');
     $mail->addAddress($_SESSION['reset_email']);
     $mail->Subject = 'New Password Reset OTP';
     $mail->Body = "Your new OTP for password reset is: $otp\nThis OTP is valid for 15 minutes.";

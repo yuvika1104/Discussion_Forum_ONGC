@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS user (
 CREATE TABLE  IF NOT EXISTS threads (
     thread_id INT PRIMARY KEY AUTO_INCREMENT,           -- Unique thread ID
     title TEXT NOT NULL,                             -- Thread question text
-    content TEXT NOT NULL
+    content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- Timestamp of thread creation
     cpf_no CHAR(5),                                     -- Foreign key referencing user
     active TINYINT NOT NULL DEFAULT 1,                  -- active or not
